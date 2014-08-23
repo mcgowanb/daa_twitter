@@ -27,7 +27,8 @@ public class App {
 	public void processArrivals(Properties config) throws IOException {
 		String url = config.getProperty("arrivals_url");
 		HtmlParser parser = new HtmlParser(url,config);
-		parser.urlProcess();
+		parser.dataFetch();
+		//parser.sampleProcess();
 
 	}
 
