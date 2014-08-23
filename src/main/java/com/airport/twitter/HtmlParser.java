@@ -13,15 +13,19 @@ import org.jsoup.select.Elements;
 public class HtmlParser {
 	private String url;
 	private String carrier;
-	ArrayList<ArrayList<String>> flights = new ArrayList<ArrayList<String>>();
+	private String t1;
+	private String t2;
+	private ArrayList<FlightObject> flights = new ArrayList<FlightObject>();
 
 	public HtmlParser(String url, Properties config) {
 		this.url = url;
 		this.carrier = config.getProperty("carrier");
+		t1 = "t1";
+		t2 = "t2";
 
 	}
 
-	public void dataFetch() throws IOException {
+	public ArrayList<FlightObject> dataFetch() throws IOException {
 
 		Document doc = Jsoup.connect(url).get();
 
@@ -31,16 +35,53 @@ public class HtmlParser {
 			Elements tableRow = tab.getElementsByTag("tr");
 			for (Element tr : tableRow) {
 				if (tr.text().contains(carrier)) {
+					FlightObject fo = new FlightObject();
 					Elements tableCol = tr.getElementsByTag("td");
-					for (Element td : tableCol) {	//col in each row
-						System.out.println(td + " ");
-						
+					for (int i = 0; i < tableCol.size(); i++) {
+
+						Element td = tableCol.get(i);
+						//System.out.println(td + " ");
+						switch (i) {
+						case 0: {
+							if (td.text().contains("../../images/t1.jpg")) {
+								fo.setTerminal(t1.toUpperCase());
+
+							} else if (td.text().contains("../../images/t2.jpg")) {
+								fo.setTerminal(t2.toUpperCase());
+							}
+							break;
+						}
+						case 1: {
+							fo.setArrivFrom(td.text());
+							break;
+						}
+						case 2: {
+							fo.setAirline(td.text());
+							break;
+						}
+						case 3: {
+							fo.setFlightNo(td.text());
+							break;
+						}
+						case 4: {
+							fo.setDate(td.text());
+							break;
+						}
+						case 5: {
+							if (td.text().isEmpty())
+								;
+							else
+								fo.setStatus(td.text());
+							break;
+						}
+						}
 					}
-					System.out.println();
+					flights.add(fo);
+					// System.out.println();
 				}
 			}
 		}
-
+		return flights;
 	}
 
 	public void sampleProcess() throws IOException {

@@ -1,8 +1,7 @@
 package com.airport.twitter;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -10,6 +9,9 @@ import java.util.Properties;
  * 
  */
 public class App {
+	
+	private ArrayList<FlightObject> flights = new ArrayList<FlightObject>();
+	
 	public static void main(String[] args) throws IOException {
 		App app = new App();
 
@@ -21,15 +23,24 @@ public class App {
 		arr.gatherData();
 
 		app.processArrivals(config);
+		app.printList();
+		
+		System.out.println("random text here");
 
 	}
 
 	public void processArrivals(Properties config) throws IOException {
 		String url = config.getProperty("arrivals_url");
 		HtmlParser parser = new HtmlParser(url,config);
-		parser.dataFetch();
+		flights = parser.dataFetch();
 		//parser.sampleProcess();
 
+	}
+	
+	public void printList(){
+		for (FlightObject fo : flights){
+			System.out.println(fo);
+		}
 	}
 
 	public static void print(String msg, Object... args) {
