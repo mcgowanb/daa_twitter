@@ -15,6 +15,7 @@ public class HtmlParser {
 	private String carrier;
 	private String t1;
 	private String t2;
+	private boolean isArrivals;
 	private ArrayList<FlightObject> flights = new ArrayList<FlightObject>();
 
 	public HtmlParser(String url, Properties config) {
@@ -22,6 +23,7 @@ public class HtmlParser {
 		this.carrier = config.getProperty("carrier");
 		t1 = "t1";
 		t2 = "t2";
+		
 
 	}
 
@@ -35,18 +37,19 @@ public class HtmlParser {
 			Elements tableRow = tab.getElementsByTag("tr");
 			for (Element tr : tableRow) {
 				if (tr.text().contains(carrier)) {
+
 					FlightObject fo = new FlightObject();
 					Elements tableCol = tr.getElementsByTag("td");
-					for (int i = 0; i < tableCol.size(); i++) {
 
+					for (int i = 0; i < tableCol.size(); i++) {
 						Element td = tableCol.get(i);
-						//System.out.println(td + " ");
+
 						switch (i) {
 						case 0: {
-							if (td.text().contains("../../images/t1.jpg")) {
+							if (td.outerHtml().contains(t1)) {
 								fo.setTerminal(t1.toUpperCase());
 
-							} else if (td.text().contains("../../images/t2.jpg")) {
+							} else if (td.outerHtml().contains(t2)) {
 								fo.setTerminal(t2.toUpperCase());
 							}
 							break;
@@ -77,7 +80,6 @@ public class HtmlParser {
 						}
 					}
 					flights.add(fo);
-					// System.out.println();
 				}
 			}
 		}

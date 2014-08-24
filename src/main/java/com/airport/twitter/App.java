@@ -10,35 +10,62 @@ import java.util.Properties;
  */
 public class App {
 	
-	private ArrayList<FlightObject> flights = new ArrayList<FlightObject>();
+	private ArrayList<FlightObject> departuresList = new ArrayList<FlightObject>();
+	private ArrayList<FlightObject> arrivalsList = new ArrayList<FlightObject>();
+	private boolean isArrivals;
+	private String filePath;
+	
+	public App(){
+		isArrivals = false;
+	}
 	
 	public static void main(String[] args) throws IOException {
 		App app = new App();
 
-		String filePath = "/" + args[0];
+		app.filePath = "/" + args[0];
+		//if (args[1] == "arrivals"){
+			//app.isArrivals = true;
+		//}
 		Properties config = new Properties();
-		config.load(App.class.getResourceAsStream(filePath));
+		config.load(App.class.getResourceAsStream(app.filePath));
 		
-		Arrivals arr = new Arrivals(config);
-		arr.gatherData();
+		//Arrivals arr = new Arrivals(config);
+		//arr.gatherData();
 
 		app.processArrivals(config);
-		app.printList();
+		app.printList(app.arrivalsList);
 		
-		System.out.println("random text here");
-
+		System.out.println();
+		System.out.println("====================BREAK====================");
+		System.out.println();
+		
+		app.processDeparture(config);
+		app.printList(app.departuresList);
+		
+	}	
+	
+	public void arrivalOrDepartures(){
+		
+	}
+	
+	
+	public void processDeparture(Properties config) throws IOException{
+		String url = config.getProperty("departures_url");
+		HtmlParser parser = new HtmlParser(url, config);
+		departuresList = parser.dataFetch();
+		
 	}
 
 	public void processArrivals(Properties config) throws IOException {
 		String url = config.getProperty("arrivals_url");
 		HtmlParser parser = new HtmlParser(url,config);
-		flights = parser.dataFetch();
+		arrivalsList = parser.dataFetch();
 		//parser.sampleProcess();
 
 	}
 	
-	public void printList(){
-		for (FlightObject fo : flights){
+	public void printList(ArrayList<FlightObject> list){
+		for (FlightObject fo : list){
 			System.out.println(fo);
 		}
 	}
