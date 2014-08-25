@@ -11,15 +11,12 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 public class HtmlParser {
-	private String url;
 	private String carrier;
 	private String t1;
 	private String t2;
-	private boolean isArrivals;
 	private ArrayList<FlightObject> flights = new ArrayList<FlightObject>();
 
 	public HtmlParser(String url, Properties config) {
-		this.url = url;
 		this.carrier = config.getProperty("carrier");
 		t1 = "t1";
 		t2 = "t2";
@@ -27,7 +24,7 @@ public class HtmlParser {
 
 	}
 
-	public ArrayList<FlightObject> dataFetch() throws IOException {
+	public ArrayList<FlightObject> arrivalsFetch(String url) throws IOException {
 
 		Document doc = Jsoup.connect(url).get();
 
@@ -38,7 +35,7 @@ public class HtmlParser {
 			for (Element tr : tableRow) {
 				if (tr.text().contains(carrier)) {
 
-					FlightObject fo = new FlightObject();
+					FlightObject arr = new Arrivals();
 					Elements tableCol = tr.getElementsByTag("td");
 
 					for (int i = 0; i < tableCol.size(); i++) {
@@ -47,59 +44,104 @@ public class HtmlParser {
 						switch (i) {
 						case 0: {
 							if (td.outerHtml().contains(t1)) {
-								fo.setTerminal(t1.toUpperCase());
+								arr.setTerminal(t1.toUpperCase());
 
 							} else if (td.outerHtml().contains(t2)) {
-								fo.setTerminal(t2.toUpperCase());
+								arr.setTerminal(t2.toUpperCase());
 							}
 							break;
 						}
 						case 1: {
-							fo.setArrivFrom(td.text());
+							((Arrivals) arr).setArrivFrom(td.text());
 							break;
 						}
 						case 2: {
-							fo.setAirline(td.text());
+							arr.setAirline(td.text());
 							break;
 						}
 						case 3: {
-							fo.setFlightNo(td.text());
+							arr.setFlightNo(td.text());
 							break;
 						}
 						case 4: {
-							fo.setDate(td.text());
+							arr.setDate(td.text());
 							break;
 						}
 						case 5: {
 							if (td.text().isEmpty())
 								;
 							else
-								fo.setStatus(td.text());
+								arr.setStatus(td.text());
 							break;
 						}
 						}
 					}
-					flights.add(fo);
+					flights.add(arr);
 				}
 			}
 		}
 		return flights;
 	}
+	
+	public ArrayList<FlightObject> departuresFetch(String url) throws IOException {
 
-	public void sampleProcess() throws IOException {
 		Document doc = Jsoup.connect(url).get();
-		Elements tr = doc.getElementsByTag("tbody");
 
-		for (Element t : tr) {
-			int i = 0;
-			for (Node node : t.childNodes()) {
-				i++;
-				System.out.println(String.format("%d %s %s", i, node.getClass()
-						.getSimpleName(), node.toString()));
-				// System.out.println(node.toString());
+		Elements table = doc.getElementsByTag("table");
+
+		for (Element tab : table) {
+			Elements tableRow = tab.getElementsByTag("tr");
+			for (Element tr : tableRow) {
+				if (tr.text().contains(carrier)) {
+
+					FlightObject dep = new Departures();
+					Elements tableCol = tr.getElementsByTag("td");
+
+					for (int i = 0; i < tableCol.size(); i++) {
+						Element td = tableCol.get(i);
+
+						switch (i) {
+						case 0: {
+							if (td.outerHtml().contains(t1)) {
+								dep.setTerminal(t1.toUpperCase());
+
+							} else if (td.outerHtml().contains(t2)) {
+								dep.setTerminal(t2.toUpperCase());
+							}
+							break;
+						}
+						case 1: {
+							((Departures) dep).setDepartTo(td.text());
+							break;
+						}
+						case 2: {
+							dep.setAirline(td.text());
+							break;
+						}
+						case 3: {
+							dep.setFlightNo(td.text());
+							break;
+						}
+						case 4: {
+							dep.setDate(td.text());
+							break;
+						}
+						case 5: {
+							if (td.text().isEmpty())
+								;
+							else
+								dep.setStatus(td.text());
+							break;
+						}
+						}
+					}
+					flights.add(dep);
+				}
 			}
-
 		}
-
+		return flights;
 	}
+	
+	
+
 }

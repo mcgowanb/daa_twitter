@@ -2,6 +2,7 @@ package com.airport.twitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Properties;
 
 /**
@@ -12,7 +13,7 @@ public class App {
 
 	private ArrayList<FlightObject> departuresList = new ArrayList<FlightObject>();
 	private ArrayList<FlightObject> arrivalsList = new ArrayList<FlightObject>();
-	private String filePath, searchFor;
+	private String filePath;
 	private Properties config;
 
 	public App() {
@@ -26,33 +27,47 @@ public class App {
 
 		app.config.load(App.class.getResourceAsStream(app.filePath));
 
-		app.doArrivals();
-		app.doDepartures();
-		
+		app.arrivalsList = app.doArrivals();
+		app.arrivalsList = app.processResults(app.arrivalsList);
 		app.printList(app.arrivalsList);
-		
+
 		System.out.println();
 		System.out.println("====================BREAK====================");
 		System.out.println();
 
+		app.departuresList = app.doDepartures();
+		app.departuresList = app.processResults(app.departuresList);
 		app.printList(app.departuresList);
 
-		
-
 	}
 
-	
-	public void doArrivals() throws IOException{
+	public ArrayList<FlightObject> doArrivals() throws IOException {
 		String url = config.getProperty("arrivals_url");
 		HtmlParser parser = new HtmlParser(url, config);
-		arrivalsList = parser.dataFetch();
+		arrivalsList = parser.arrivalsFetch(url);
+		return arrivalsList;
 	}
-	
-	public void doDepartures() throws IOException{
+
+	public ArrayList<FlightObject> doDepartures() throws IOException {
 		String url = config.getProperty("departures_url");
 		HtmlParser parser = new HtmlParser(url, config);
-		departuresList = parser.dataFetch();
-		
+		departuresList = parser.departuresFetch(url);
+		return departuresList;
+
+	}
+
+	public ArrayList<FlightObject> processResults(ArrayList<FlightObject> list) {
+		for (Iterator<FlightObject> iter = list.iterator(); iter.hasNext();) {
+			FlightObject fo = iter.next();
+			if (fo.status == null) {
+				iter.remove();
+				continue;
+			}
+			if (fo.status.contains("Delayed") | fo.status.contains("Due")){
+				iter.remove();
+			}
+		}
+		return list;
 	}
 
 	public void printList(ArrayList<FlightObject> list) {
