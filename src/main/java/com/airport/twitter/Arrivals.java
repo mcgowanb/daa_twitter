@@ -19,10 +19,8 @@ public class Arrivals extends FlightObject {
 
 	@Override
 	public String toString() {
-		return "Arrivals [terminal= " + terminal + ", \tarrivFrom= " + arrivFrom
-				+ ", \t airline= " + airline + ", \t flightNo= " + flightNo + ", \t date= "
-				+ date + ",\t status= " + status + "]";
+		return terminal + ": " + airline + " From: " + arrivFrom + " Flight No: "
+				+ flightNo + " Arrival Time: " + date + " Status: " + status;
 	}
-
 
 }

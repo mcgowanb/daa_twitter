@@ -13,7 +13,7 @@ public class App {
 
 	private ArrayList<FlightObject> departuresList = new ArrayList<FlightObject>();
 	private ArrayList<FlightObject> arrivalsList = new ArrayList<FlightObject>();
-	private String filePath;
+	private String filePath, lastArrival, lastDeparture;
 	private Properties config;
 
 	public App() {
@@ -26,17 +26,30 @@ public class App {
 		app.filePath = "/" + args[0];
 
 		app.config.load(App.class.getResourceAsStream(app.filePath));
+		
+		System.out.println();
+		System.out.println("====================Listing Arrivals====================");
+		System.out.println();
 
 		app.arrivalsList = app.doArrivals();
-		app.printList(app.arrivalsList);
+		//app.printList(app.arrivalsList);
+		app.lastArrival = app.arrivalsList.get(0).toString();
+		System.out.println(app.lastArrival);
 
 		System.out.println();
-		System.out.println("====================BREAK====================");
+		System.out.println("====================Listing Departures====================");
 		System.out.println();
 
 		app.departuresList = app.doDepartures();
-		app.printList(app.departuresList);
-
+		//app.printList(app.departuresList);
+		app.lastDeparture = app.departuresList.get(0).toString();
+		System.out.println(app.lastDeparture);
+		
+		
+		System.out.println();
+		System.out.println("====================END====================");
+		System.out.println();
+		
 	}
 
 	public ArrayList<FlightObject> doArrivals() throws IOException {
