@@ -6,7 +6,7 @@ import java.util.Comparator;
 public class FlightObject {
 
 	protected String terminal, airline, flightNo, date,
-			status;
+			status, hashTag;
 
 	public FlightObject() {
 
@@ -15,49 +15,83 @@ public class FlightObject {
 		flightNo = null;
 		date = null;
 		status = null;
+		hashTag = null;
 
 	}
+
+	
 
 	public String getTerminal() {
 		return terminal;
 	}
+
+
 
 	public void setTerminal(String terminal) {
 		this.terminal = terminal;
 	}
 
 
+
 	public String getAirline() {
 		return airline;
 	}
+
+
 
 	public void setAirline(String airline) {
 		this.airline = airline;
 	}
 
+
+
 	public String getFlightNo() {
 		return flightNo;
 	}
+
+
 
 	public void setFlightNo(String flightNo) {
 		this.flightNo = flightNo;
 	}
 
+
+
 	public String getDate() {
 		return date;
 	}
+
+
 
 	public void setDate(String date) {
 		this.date = date;
 	}
 
+
+
 	public String getStatus() {
 		return status;
 	}
 
+
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+
+
+	public String getHashTag() {
+		return hashTag;
+	}
+
+
+
+	public void setHashTag(String hashTag) {
+		this.hashTag = hashTag;
+	}
+
+
 
 	@Override
 	public String toString() {

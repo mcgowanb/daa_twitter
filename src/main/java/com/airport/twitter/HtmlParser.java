@@ -13,16 +13,14 @@ import org.jsoup.select.Elements;
 
 public class HtmlParser {
 	private String carrier;
-	private String t1;
-	private String t2;
+	private String t1, t2, hashTag;
 	private ArrayList<FlightObject> flights = new ArrayList<FlightObject>();
 
 	public HtmlParser(String url, Properties config) {
 		this.carrier = config.getProperty("carrier");
 		t1 = "t1";
 		t2 = "t2";
-		
-
+		hashTag = "#DAA";
 	}
 
 	public ArrayList<FlightObject> arrivalsFetch(String url) throws IOException {
@@ -77,14 +75,16 @@ public class HtmlParser {
 						}
 						}
 					}
+					arr.setHashTag(hashTag);
 					flights.add(arr);
 				}
 			}
 		}
 		return flights;
 	}
-	
-	public ArrayList<FlightObject> departuresFetch(String url) throws IOException {
+
+	public ArrayList<FlightObject> departuresFetch(String url)
+			throws IOException {
 
 		Document doc = Jsoup.connect(url).get();
 
@@ -136,13 +136,14 @@ public class HtmlParser {
 						}
 						}
 					}
+					dep.setHashTag(hashTag);
 					flights.add(dep);
 				}
 			}
 		}
 		return flights;
 	}
-	
+
 	public ArrayList<FlightObject> processResults(ArrayList<FlightObject> list) {
 		for (Iterator<FlightObject> iter = list.iterator(); iter.hasNext();) {
 			FlightObject fo = iter.next();
@@ -150,11 +151,10 @@ public class HtmlParser {
 				iter.remove();
 				continue;
 			}
-			if (fo.status.contains("Delayed") || fo.status.contains("Due")){
+			if (fo.status.contains("Delayed") || fo.status.contains("Due")) {
 				iter.remove();
 			}
-			
-			
+
 		}
 		return list;
 	}

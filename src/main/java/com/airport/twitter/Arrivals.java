@@ -19,8 +19,8 @@ public class Arrivals extends FlightObject {
 
 	@Override
 	public String toString() {
-		return terminal + ": " + airline + " From: " + arrivFrom + " Flight No: "
-				+ flightNo + " Arrival Time: " + date + " Status: " + status;
+		return terminal + ": " + airline + " arriving from " + arrivFrom + ", flight no: "
+				+ flightNo + ". Arrival time: " + date + ". Status: " + status + ". " + hashTag;
 	}
 
 }

@@ -13,7 +13,8 @@ public class App {
 
 	private ArrayList<FlightObject> departuresList = new ArrayList<FlightObject>();
 	private ArrayList<FlightObject> arrivalsList = new ArrayList<FlightObject>();
-	private String filePath, lastArrival, lastDeparture;
+	private String filePath, lastArrival, lastDeparture, arrivalsUrl,
+			departuresUrl;
 	private Properties config;
 
 	public App() {
@@ -24,54 +25,54 @@ public class App {
 		App app = new App();
 
 		app.filePath = "/" + args[0];
-
 		app.config.load(App.class.getResourceAsStream(app.filePath));
-		
-		System.out.println();
-		System.out.println("====================Listing Arrivals====================");
-		System.out.println();
+		app.arrivalsUrl = app.config.getProperty("arrivals_url");
+		app.departuresUrl = app.config.getProperty("departures_url");
+		System.out
+				.println("Fetching data from the DAA Website...........................");
 
-		app.arrivalsList = app.doArrivals();
-		//app.printList(app.arrivalsList);
-		app.lastArrival = app.arrivalsList.get(0).toString();
+		app.doArrivals();
 		System.out.println(app.lastArrival);
 
-		System.out.println();
-		System.out.println("====================Listing Departures====================");
-		System.out.println();
-
-		app.departuresList = app.doDepartures();
-		//app.printList(app.departuresList);
-		app.lastDeparture = app.departuresList.get(0).toString();
+		app.doDepartures();
 		System.out.println(app.lastDeparture);
 		
-		
-		System.out.println();
-		System.out.println("====================END====================");
-		System.out.println();
+		app.debug(app.arrivalsUrl, app.arrivalsList);
+		app.debug(app.arrivalsUrl, app.arrivalsList);
 		
 	}
 
-	public ArrayList<FlightObject> doArrivals() throws IOException {
+	public void debug(String url, ArrayList<FlightObject> list) {
+
+		System.out.println();
+		System.out.println("====================DEBUG====================");
+		System.out.println("Parsing data from....................." + url);
+		System.out.println();
+		printList(list);
+		System.out.println("====================END DEBUG====================");
+		System.out.println();
+
+	}
+
+	public void doArrivals() throws IOException {
 		String url = config.getProperty("arrivals_url");
 		HtmlParser parser = new HtmlParser(url, config);
 		arrivalsList = parser.arrivalsFetch(url);
 		arrivalsList = parser.processResults(arrivalsList);
 		Collections.sort(arrivalsList, FlightObject.SORT_BY_DATE);
-		return arrivalsList;
+		lastArrival = arrivalsList.get(0).toString();
+
 	}
 
-	public ArrayList<FlightObject> doDepartures() throws IOException {
+	public void doDepartures() throws IOException {
 		String url = config.getProperty("departures_url");
 		HtmlParser parser = new HtmlParser(url, config);
 		departuresList = parser.departuresFetch(url);
 		departuresList = parser.processResults(departuresList);
 		Collections.sort(departuresList, FlightObject.SORT_BY_DATE);
-		return departuresList;
+		lastDeparture = departuresList.get(0).toString();
 
 	}
-
-	
 
 	public void printList(ArrayList<FlightObject> list) {
 		for (FlightObject fo : list) {
@@ -81,6 +82,26 @@ public class App {
 
 	public static void print(String msg, Object... args) {
 		System.out.println(String.format(msg, args));
+	}
+
+	public void printArrivalsList() {
+		System.out.println();
+		System.out
+				.println("====================LISTING ARRIVALS====================");
+		printList(arrivalsList);
+		System.out
+				.println("====================END ARRIVALS====================");
+		System.out.println();
+	}
+
+	public void printDeparturesList() {
+		System.out.println();
+		System.out
+				.println("====================LISTING DEPARTURES====================");
+		printList(departuresList);
+		System.out
+				.println("====================END DEPARTURES====================");
+		System.out.println();
 	}
 
 }
