@@ -2,6 +2,7 @@ package com.airport.twitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Properties;
 
 import org.jsoup.Jsoup;
@@ -142,6 +143,19 @@ public class HtmlParser {
 		return flights;
 	}
 	
-	
-
+	public ArrayList<FlightObject> processResults(ArrayList<FlightObject> list) {
+		for (Iterator<FlightObject> iter = list.iterator(); iter.hasNext();) {
+			FlightObject fo = iter.next();
+			if (fo.status == null) {
+				iter.remove();
+				continue;
+			}
+			if (fo.status.contains("Delayed") || fo.status.contains("Due")){
+				iter.remove();
+			}
+			
+			
+		}
+		return list;
+	}
 }

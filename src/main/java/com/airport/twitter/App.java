@@ -2,7 +2,7 @@ package com.airport.twitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.Properties;
 
 /**
@@ -28,7 +28,6 @@ public class App {
 		app.config.load(App.class.getResourceAsStream(app.filePath));
 
 		app.arrivalsList = app.doArrivals();
-		app.arrivalsList = app.processResults(app.arrivalsList);
 		app.printList(app.arrivalsList);
 
 		System.out.println();
@@ -36,7 +35,6 @@ public class App {
 		System.out.println();
 
 		app.departuresList = app.doDepartures();
-		app.departuresList = app.processResults(app.departuresList);
 		app.printList(app.departuresList);
 
 	}
@@ -45,6 +43,8 @@ public class App {
 		String url = config.getProperty("arrivals_url");
 		HtmlParser parser = new HtmlParser(url, config);
 		arrivalsList = parser.arrivalsFetch(url);
+		arrivalsList = parser.processResults(arrivalsList);
+		Collections.sort(arrivalsList, FlightObject.SORT_BY_DATE);
 		return arrivalsList;
 	}
 
@@ -52,23 +52,13 @@ public class App {
 		String url = config.getProperty("departures_url");
 		HtmlParser parser = new HtmlParser(url, config);
 		departuresList = parser.departuresFetch(url);
+		departuresList = parser.processResults(departuresList);
+		Collections.sort(departuresList, FlightObject.SORT_BY_DATE);
 		return departuresList;
 
 	}
 
-	public ArrayList<FlightObject> processResults(ArrayList<FlightObject> list) {
-		for (Iterator<FlightObject> iter = list.iterator(); iter.hasNext();) {
-			FlightObject fo = iter.next();
-			if (fo.status == null) {
-				iter.remove();
-				continue;
-			}
-			if (fo.status.contains("Delayed") | fo.status.contains("Due")){
-				iter.remove();
-			}
-		}
-		return list;
-	}
+	
 
 	public void printList(ArrayList<FlightObject> list) {
 		for (FlightObject fo : list) {

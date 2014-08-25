@@ -1,6 +1,7 @@
 package com.airport.twitter;
 
-import org.jsoup.nodes.Element;
+import java.util.Comparator;
+
 
 public class FlightObject {
 
@@ -60,12 +61,16 @@ public class FlightObject {
 
 	@Override
 	public String toString() {
-		return "FlightObject [terminal=" + terminal + ", airline=" + airline
-				+ ", flightNo=" + flightNo + ", date=" + date + ", status="
+		return "FlightObject [terminal=" + terminal + ",\t airline=" + airline
+				+ ",\t flightNo=" + flightNo + ",\t date=" + date + ",\t status="
 				+ status + "]";
 	}
 
-	
+	public static Comparator<FlightObject> SORT_BY_DATE = new Comparator<FlightObject>() {
+        public int compare(FlightObject one, FlightObject other) {
+            return -one.date.compareTo(other.date);
+        }
+    };
 	
 
 }

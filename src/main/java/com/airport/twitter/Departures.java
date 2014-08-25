@@ -19,9 +19,9 @@ public class Departures extends FlightObject {
 
 	@Override
 	public String toString() {
-		return "Departures [terminal=" + terminal + ", departTo=" + departTo
-				+ ", airline=" + airline + ", flightNo=" + flightNo + ", date="
-				+ date + ", status=" + status + "]";
+		return "Arrivals [terminal= " + terminal + ", \tdepartTo= " + departTo
+				+ ", \t airline= " + airline + ", \t flightNo= " + flightNo + ", \t date= "
+				+ date + ",\t status= " + status + "]";
 	}
 
 }
