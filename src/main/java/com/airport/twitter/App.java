@@ -32,13 +32,27 @@ public class App {
 				.println("Fetching data from the DAA Website...........................");
 
 		app.doArrivals();
-		System.out.println(app.lastArrival);
+		//System.out.println(app.lastArrival);
+		app.postArrival(app.lastArrival);
 
-		app.doDepartures();
-		System.out.println(app.lastDeparture);
+		//app.doDepartures();
+		//System.out.println(app.lastDeparture);
 		
-		app.debug(app.arrivalsUrl, app.arrivalsList);
-		app.debug(app.arrivalsUrl, app.arrivalsList);
+		
+
+		//app.debug(app.arrivalsUrl, app.arrivalsList);
+		//app.debug(app.arrivalsUrl, app.arrivalsList);
+
+	}
+	
+	public void postDeparture(){
+		
+	}
+	
+	public void postArrival(String status){
+		TwitterProcess tp = new TwitterProcess(status);
+		tp.initialise(config);
+		tp.postToTwitter();
 		
 	}
 
