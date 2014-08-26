@@ -13,6 +13,7 @@ public class App {
 
 	private ArrayList<FlightObject> departuresList = new ArrayList<FlightObject>();
 	private ArrayList<FlightObject> arrivalsList = new ArrayList<FlightObject>();
+	private ArrayList<String> airlineList = new ArrayList<String>();
 	private String filePath, lastArrival, lastDeparture, arrivalsUrl,
 			departuresUrl;
 	private Properties config;
@@ -28,6 +29,11 @@ public class App {
 		app.config.load(App.class.getResourceAsStream(app.filePath));
 		app.arrivalsUrl = app.config.getProperty("arrivals_url");
 		app.departuresUrl = app.config.getProperty("departures_url");
+		
+		app.airlineList = new AirlineList(app.config).generateList();
+		System.out.println(app.airlineList);
+		
+		/*
 		System.out.println("Fetching data from the DAA Website...........................");
 		System.out.println();
 		System.out.println("Processing arrivals data");
@@ -42,7 +48,7 @@ public class App {
 		System.out.println();
 
 		app.doDepartures();
-		System.out.println(app.lastDeparture);
+		System.out.println(app.lastDeparture); */
 		//app.postDeparture(app.lastDeparture);
 
 		// app.debug(app.arrivalsUrl, app.arrivalsList);
