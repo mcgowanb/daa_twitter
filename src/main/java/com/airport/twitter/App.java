@@ -28,32 +28,40 @@ public class App {
 		app.config.load(App.class.getResourceAsStream(app.filePath));
 		app.arrivalsUrl = app.config.getProperty("arrivals_url");
 		app.departuresUrl = app.config.getProperty("departures_url");
-		System.out
-				.println("Fetching data from the DAA Website...........................");
+		System.out.println("Fetching data from the DAA Website...........................");
+		System.out.println();
+		System.out.println("Processing arrivals data");
+		System.out.println();
 
 		app.doArrivals();
-		//System.out.println(app.lastArrival);
-		app.postArrival(app.lastArrival);
+		System.out.println(app.lastArrival);
+		//app.postArrival(app.lastArrival);
 
-		//app.doDepartures();
-		//System.out.println(app.lastDeparture);
-		
-		
+		System.out.println();
+		System.out.println("Processing departures data");
+		System.out.println();
 
-		//app.debug(app.arrivalsUrl, app.arrivalsList);
-		//app.debug(app.arrivalsUrl, app.arrivalsList);
+		app.doDepartures();
+		System.out.println(app.lastDeparture);
+		//app.postDeparture(app.lastDeparture);
+
+		// app.debug(app.arrivalsUrl, app.arrivalsList);
+		// app.debug(app.arrivalsUrl, app.arrivalsList);
 
 	}
-	
-	public void postDeparture(){
-		
-	}
-	
-	public void postArrival(String status){
+
+	public void postDeparture(String status) {
 		TwitterProcess tp = new TwitterProcess(status);
-		tp.initialise(config);
+		tp.initialiseDepartures(config);
 		tp.postToTwitter();
-		
+
+	}
+
+	public void postArrival(String status) {
+		TwitterProcess tp = new TwitterProcess(status);
+		tp.initialiseArrivals(config);
+		tp.postToTwitter();
+
 	}
 
 	public void debug(String url, ArrayList<FlightObject> list) {

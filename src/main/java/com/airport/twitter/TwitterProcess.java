@@ -17,16 +17,27 @@ public class TwitterProcess {
 		this.status = status;
 	}
 	
-	public void initialise(Properties config){
+	public void initialiseArrivals(Properties config){
 		
 	ConfigurationBuilder cb = new ConfigurationBuilder();
 	cb.setDebugEnabled(true)
-	  .setOAuthConsumerKey(config.getProperty("oauth.consumerKey"))
-	  .setOAuthConsumerSecret(config.getProperty("oauth.consumerSecret"))
-	  .setOAuthAccessToken(config.getProperty("oauth.accessToken"))
-	  .setOAuthAccessTokenSecret(config.getProperty("oauth.accessTokenSecret"));
+	  .setOAuthConsumerKey(config.getProperty("arrival.oauth.consumerKey"))
+	  .setOAuthConsumerSecret(config.getProperty("arrival.oauth.consumerSecret"))
+	  .setOAuthAccessToken(config.getProperty("arrival.oauth.accessToken"))
+	  .setOAuthAccessTokenSecret(config.getProperty("arrival.oauth.accessTokenSecret"));
 	this.tf = new TwitterFactory(cb.build());
 	}
+	
+	public void initialiseDepartures(Properties config){
+		
+		ConfigurationBuilder cb = new ConfigurationBuilder();
+		cb.setDebugEnabled(true)
+		  .setOAuthConsumerKey(config.getProperty("departures.oauth.consumerKey"))
+		  .setOAuthConsumerSecret(config.getProperty("departures.oauth.consumerSecret"))
+		  .setOAuthAccessToken(config.getProperty("departures.oauth.accessToken"))
+		  .setOAuthAccessTokenSecret(config.getProperty("departures.oauth.accessTokenSecret"));
+		this.tf = new TwitterFactory(cb.build());
+		}
 	
 	public void postToTwitter(){
 		Twitter twitter = tf.getInstance();
@@ -37,7 +48,7 @@ public class TwitterProcess {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    System.out.println("Successfully updated the status to [" + result.getText() + "].");
+	    System.out.println("Successfully updated twitter status to [" + result.getText() + "].");
 	}
 	
 	
