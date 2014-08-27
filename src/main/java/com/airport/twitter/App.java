@@ -17,6 +17,8 @@ public class App {
 	private ArrayList<FlightObject> departuresList = new ArrayList<FlightObject>();
 	private ArrayList<FlightObject> arrivalsList = new ArrayList<FlightObject>();
 	private ArrayList<String> airlineList = new ArrayList<String>();
+	private ArrayList<String> arrivedFlights = new ArrayList<String>();
+	private ArrayList<String> departedFlights = new ArrayList<String>();
 	private String filePath, lastArrival, lastDeparture, arrivalsUrl,
 			departuresUrl;
 	private Properties config;
@@ -37,43 +39,35 @@ public class App {
 		app.departuresUrl = app.config.getProperty("departures_url");
 
 		app.airlineList = new AirlineList(app.config).generateList();
+		app.createDocs();
 
 		System.out
 				.println("Fetching data from the DAA Website...........................");
 		System.out.println();
-		System.out.println("Processing arrivals data");
+		System.out.println("==========PROCESSING ARRIVALS DATA==========");
 		System.out.println();
-
-		app.createDocs();
 
 		for (String str : app.airlineList) {
 			app.doArrivals(str);
-			System.out.println(app.lastArrival);
-			// app.postArrival(app.lastArrival);
-
-			/*
-			 * Create a new connection method to load the document. Remove this
-			 * from the parser and once done pass the document to the methods to
-			 * parse each Time this will save multiple url connections for each
-			 * airline by arrivals and departres
-			 * 
-			 * **If the list for airline is blank, skip over it to avoid an NPE.
-			 * Be cleverand use a try catch if you can.
-			 * 
-			 * 
-			 * 
-			 * 
-			 * System.out.println();
-			 * System.out.println("Processing departures data");
-			 * System.out.println();
-			 * 
-			 * app.doDepartures(str); System.out.println(app.lastDeparture);
-			 */
-			// app.postDeparture(app.lastDeparture);
-
-			// app.debug(app.arrivalsUrl, app.arrivalsList);
-			// app.debug(app.arrivalsUrl, app.arrivalsList);
 		}
+		ConsolePrinter.printStringList(app.arrivedFlights);
+
+		System.out.println();
+		System.out.println("==========END OF ARRIVALS DATA==========");
+		System.out.println();
+		
+		System.out.println();
+		System.out.println("==========PROCESSING DEPARTURES DATA==========");
+		System.out.println();
+
+		for (String str : app.airlineList) {
+			app.doDepartures(str);
+		}
+		ConsolePrinter.printStringList(app.departedFlights);
+
+		System.out.println();
+		System.out.println("==========END OF DEPARTURES DATA==========");
+		System.out.println();
 
 	}
 
@@ -102,22 +96,20 @@ public class App {
 		System.out.println("====================DEBUG====================");
 		System.out.println("Parsing data from....................." + url);
 		System.out.println();
-		printList(list);
+		ConsolePrinter.printObjecList(list);
 		System.out.println("====================END DEBUG====================");
 		System.out.println();
 
 	}
 
 	public void doArrivals(String airline) throws IOException {
-		lastArrival = null;
 		String url = config.getProperty("arrivals_url");
 		HtmlParser parser = new HtmlParser(url, config, airline);
 		arrivalsList = parser.arrivalsFetch(arrivalsDoc);
 		arrivalsList = parser.processResults(arrivalsList);
-		Collections.sort(arrivalsList, FlightObject.SORT_BY_DATE);
 		if (!arrivalsList.isEmpty()) {
-			lastArrival = arrivalsList.get(0).toString();
-		} 
+			arrivedFlights.add(arrivalsList.get(0).toString());
+		}
 
 	}
 
@@ -126,39 +118,12 @@ public class App {
 		HtmlParser parser = new HtmlParser(url, config, airline);
 		departuresList = parser.departuresFetch(departuresDoc);
 		departuresList = parser.processResults(departuresList);
-		Collections.sort(departuresList, FlightObject.SORT_BY_DATE);
-		lastDeparture = departuresList.get(0).toString();
-
-	}
-
-	public void printList(ArrayList<FlightObject> list) {
-		for (FlightObject fo : list) {
-			System.out.println(fo);
+		if (!departuresList.isEmpty()) {
+			departedFlights.add(departuresList.get(0).toString());
 		}
+
 	}
 
-	public static void print(String msg, Object... args) {
-		System.out.println(String.format(msg, args));
-	}
 
-	public void printArrivalsList() {
-		System.out.println();
-		System.out
-				.println("====================LISTING ARRIVALS====================");
-		printList(arrivalsList);
-		System.out
-				.println("====================END ARRIVALS====================");
-		System.out.println();
-	}
-
-	public void printDeparturesList() {
-		System.out.println();
-		System.out
-				.println("====================LISTING DEPARTURES====================");
-		printList(departuresList);
-		System.out
-				.println("====================END DEPARTURES====================");
-		System.out.println();
-	}
 
 }

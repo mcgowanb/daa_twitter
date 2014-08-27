@@ -2,6 +2,7 @@ package com.airport.twitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -21,6 +22,12 @@ public class HtmlParser {
 		hashTag = "#DAA";
 		this.airline = airline;
 
+	}
+	
+	public ArrayList<FlightObject> prepArrivalList(Document doc) throws IOException{
+		flights = arrivalsFetch(doc);
+		flights = processResults(flights);
+		return flights;
 	}
 
 	public ArrayList<FlightObject> arrivalsFetch(Document doc)
@@ -153,6 +160,7 @@ public class HtmlParser {
 			}
 
 		}
+		Collections.sort(list, FlightObject.SORT_BY_DATE);
 		return list;
 	}
 }

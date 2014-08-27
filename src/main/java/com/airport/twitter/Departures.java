@@ -20,7 +20,7 @@ public class Departures extends FlightObject {
 	@Override
 	public String toString() {
 		return terminal + ": " + airline + " departing to " + departTo + ", flight no: "
-				+ flightNo + ". Arrival time: " + date + ". Status: " + status + ". " + hashTag;
+				+ flightNo + ". Departure time: " + date + ". Status: " + status + ". " + hashTag;
 	}
 
 
