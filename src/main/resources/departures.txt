@@ -1,0 +1,8 @@
+Aer Lingus=T2: Aer Lingus departing to London-LHR, flight no: EI184. Departure time: 27 Aug 20:10. Status: Departed 20:12. #DAA
+British Airways=T1: British Airways departing to London-LHR, flight no: BA823. Departure time: 27 Aug 19:20. Status: Departed 19:43. #DAA
+Etihad Airways=T2: Etihad Airways departing to Abu Dhabi, flight no: EY048. Departure time: 27 Aug 20:45. Status: Departed 20:46. #DAA
+Flybe=T1: Flybe departing to Exeter, flight no: BE304. Departure time: 27 Aug 21:20. Status: Departed 21:25. #DAA
+Lufthansa=T1: Lufthansa departing to Frankfurt, flight no: LH981. Departure time: 27 Aug 18:00. Status: Departed 18:11. #DAA
+Ryanair=T1: Ryanair departing to Manchester, flight no: FR558. Departure time: 27 Aug 21:35. Status: Departed 21:34. #DAA
+Sas=T1: Sas departing to Copenhagen, flight no: SK2538. Departure time: 27 Aug 19:00. Status: Departed 18:59. #DAA
+Tui Travel=T1: Tui Travel departing to Ibiza, flight no: TOM1372. Departure time: 27 Aug 18:55. Status: Departed 18:59. #DAA

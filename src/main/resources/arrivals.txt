@@ -1,0 +1,12 @@
+Aer Lingus=T2: Aer Lingus arriving from Malaga, flight no: EI585. Arrival time: 27 Aug 14:10. Status: Arrived 14:07. #DAA
+Air Contractors=T1: Air Contractors arriving from Dubrovnik, flight no: ABR426J. Arrival time: 27 Aug 14:30. Status: Arrived 14:30. #DAA
+Air France=T1: Air France arriving from Paris-CDG, flight no: AF1078. Arrival time: 27 Aug 13:50. Status: Arrived 13:52. #DAA
+British Airways=T1: British Airways arriving from London-LHR, flight no: BA834. Arrival time: 27 Aug 11:45. Status: Arrived 12:01. #DAA
+Emirates=T2: Emirates arriving from Dubai, flight no: EK161. Arrival time: 27 Aug 12:05. Status: Arrived 12:08. #DAA
+Flybe=T1: Flybe arriving from Southampton, flight no: BE384. Arrival time: 27 Aug 14:45. Status: Arrived 14:34. #DAA
+German Wings=T1: German Wings arriving from Cologne/Bonn, flight no: 4U396. Arrival time: 27 Aug 13:30. Status: Arrived 13:59. #DAA
+Lufthansa=T1: Lufthansa arriving from Frankfurt, flight no: LH978. Arrival time: 27 Aug 11:00. Status: Arrived 11:05. #DAA
+Luxair=T1: Luxair arriving from Luxembourg, flight no: LG4885. Arrival time: 27 Aug 12:50. Status: Arrived 12:45. #DAA
+Ryanair=T1: Ryanair arriving from Glasgow-PIK, flight no: FR771. Arrival time: 27 Aug 14:50. Status: Arrived 14:39. #DAA
+Sas=T1: Sas arriving from Oslo, flight no: SK4603. Arrival time: 27 Aug 12:15. Status: Arrived 12:09. #DAA
+United Airlines=T2: United Airlines arriving from MDT, flight no: UA1804. Arrival time: 27 Aug 11:00. Status: Arrived 11:12. #DAA

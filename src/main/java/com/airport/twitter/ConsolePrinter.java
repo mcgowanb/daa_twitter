@@ -1,6 +1,8 @@
 package com.airport.twitter;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class ConsolePrinter {
 
@@ -15,6 +17,13 @@ public class ConsolePrinter {
 			System.out.println(str);
 		}
 
+	}
+	
+	public static void printMap(Map<String, String> list){
+		for (Entry<String, String> entry : list.entrySet())
+		{
+		    System.out.println(entry.getKey() + " \t/\t " + entry.getValue());
+		}
 	}
 
 	public static void print(String msg, Object... args) {

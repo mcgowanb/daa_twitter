@@ -2,16 +2,13 @@ package com.airport.twitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-/**
- * Hello world!
- * 
- */
 public class App {
 
 	private ArrayList<FlightObject> departuresList = new ArrayList<FlightObject>();
@@ -23,6 +20,7 @@ public class App {
 			departuresUrl;
 	private Properties config;
 	private Document arrivalsDoc, departuresDoc;
+	private Map<String, String> flightMap = new TreeMap<String, String>();
 
 	public App() {
 		config = new Properties();
@@ -37,16 +35,21 @@ public class App {
 		app.config.load(App.class.getResourceAsStream(app.filePath));
 		app.arrivalsUrl = app.config.getProperty("arrivals_url");
 		app.departuresUrl = app.config.getProperty("departures_url");
-
+		
 		app.airlineList = new AirlineList(app.config).generateList();
 		app.createDocs();
+		
+		FileHandler fh = new FileHandler(app.arrivedFlights, app.departedFlights);
+		fh.checkDuplicateFlights();
 
+		/*
 		System.out
 				.println("Fetching data from the DAA Website...........................");
 		System.out.println();
 		System.out.println("==========PROCESSING ARRIVALS DATA==========");
 		System.out.println();
 
+		app.flightMap.clear();
 		for (String str : app.airlineList) {
 			app.doArrivals(str);
 		}
@@ -55,11 +58,12 @@ public class App {
 		System.out.println();
 		System.out.println("==========END OF ARRIVALS DATA==========");
 		System.out.println();
-		
+
 		System.out.println();
 		System.out.println("==========PROCESSING DEPARTURES DATA==========");
 		System.out.println();
 
+		app.flightMap.clear();		//Clear the hashmap before re=use
 		for (String str : app.airlineList) {
 			app.doDepartures(str);
 		}
@@ -68,6 +72,10 @@ public class App {
 		System.out.println();
 		System.out.println("==========END OF DEPARTURES DATA==========");
 		System.out.println();
+*/
+	}
+
+	public void prepareForTwitter() {
 
 	}
 
@@ -109,6 +117,7 @@ public class App {
 		arrivalsList = parser.processResults(arrivalsList);
 		if (!arrivalsList.isEmpty()) {
 			arrivedFlights.add(arrivalsList.get(0).toString());
+			flightMap.put(airline, arrivalsList.get(0).toString());
 		}
 
 	}
@@ -120,10 +129,9 @@ public class App {
 		departuresList = parser.processResults(departuresList);
 		if (!departuresList.isEmpty()) {
 			departedFlights.add(departuresList.get(0).toString());
+			flightMap.put(airline, departuresList.get(0).toString());
 		}
 
 	}
-
-
 
 }
