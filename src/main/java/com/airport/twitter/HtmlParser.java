@@ -8,31 +8,30 @@ import java.util.Properties;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 public class HtmlParser {
-	private String carrier;
+	private String airline;
 	private String t1, t2, hashTag;
 	private ArrayList<FlightObject> flights = new ArrayList<FlightObject>();
 
-	public HtmlParser(String url, Properties config) {
-		this.carrier = config.getProperty("carrier");
+	public HtmlParser(String url, Properties config, String airline) {
 		t1 = "t1";
 		t2 = "t2";
 		hashTag = "#DAA";
+		this.airline = airline;
+
 	}
 
-	public ArrayList<FlightObject> arrivalsFetch(String url) throws IOException {
-
-		Document doc = Jsoup.connect(url).get();
+	public ArrayList<FlightObject> arrivalsFetch(Document doc)
+			throws IOException {
 
 		Elements table = doc.getElementsByTag("table");
 
 		for (Element tab : table) {
 			Elements tableRow = tab.getElementsByTag("tr");
 			for (Element tr : tableRow) {
-				if (tr.text().contains(carrier)) {
+				if (tr.text().contains(airline)) {
 
 					FlightObject arr = new Arrivals();
 					Elements tableCol = tr.getElementsByTag("td");
@@ -83,17 +82,15 @@ public class HtmlParser {
 		return flights;
 	}
 
-	public ArrayList<FlightObject> departuresFetch(String url)
+	public ArrayList<FlightObject> departuresFetch(Document doc)
 			throws IOException {
-
-		Document doc = Jsoup.connect(url).get();
 
 		Elements table = doc.getElementsByTag("table");
 
 		for (Element tab : table) {
 			Elements tableRow = tab.getElementsByTag("tr");
 			for (Element tr : tableRow) {
-				if (tr.text().contains(carrier)) {
+				if (tr.text().contains(airline)) {
 
 					FlightObject dep = new Departures();
 					Elements tableCol = tr.getElementsByTag("td");

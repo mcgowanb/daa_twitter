@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 /**
  * Hello world!
  * 
@@ -17,9 +20,12 @@ public class App {
 	private String filePath, lastArrival, lastDeparture, arrivalsUrl,
 			departuresUrl;
 	private Properties config;
+	private Document arrivalsDoc, departuresDoc;
 
 	public App() {
 		config = new Properties();
+		arrivalsDoc = null;
+		departuresDoc = null;
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -29,31 +35,51 @@ public class App {
 		app.config.load(App.class.getResourceAsStream(app.filePath));
 		app.arrivalsUrl = app.config.getProperty("arrivals_url");
 		app.departuresUrl = app.config.getProperty("departures_url");
-		
+
 		app.airlineList = new AirlineList(app.config).generateList();
-		System.out.println(app.airlineList);
-		
-		/*
-		System.out.println("Fetching data from the DAA Website...........................");
+
+		System.out
+				.println("Fetching data from the DAA Website...........................");
 		System.out.println();
 		System.out.println("Processing arrivals data");
 		System.out.println();
 
-		app.doArrivals();
-		System.out.println(app.lastArrival);
-		//app.postArrival(app.lastArrival);
+		app.createDocs();
 
-		System.out.println();
-		System.out.println("Processing departures data");
-		System.out.println();
+		for (String str : app.airlineList) {
+			app.doArrivals(str);
+			System.out.println(app.lastArrival);
+			// app.postArrival(app.lastArrival);
 
-		app.doDepartures();
-		System.out.println(app.lastDeparture); */
-		//app.postDeparture(app.lastDeparture);
+			/*
+			 * Create a new connection method to load the document. Remove this
+			 * from the parser and once done pass the document to the methods to
+			 * parse each Time this will save multiple url connections for each
+			 * airline by arrivals and departres
+			 * 
+			 * **If the list for airline is blank, skip over it to avoid an NPE.
+			 * Be cleverand use a try catch if you can.
+			 * 
+			 * 
+			 * 
+			 * 
+			 * System.out.println();
+			 * System.out.println("Processing departures data");
+			 * System.out.println();
+			 * 
+			 * app.doDepartures(str); System.out.println(app.lastDeparture);
+			 */
+			// app.postDeparture(app.lastDeparture);
 
-		// app.debug(app.arrivalsUrl, app.arrivalsList);
-		// app.debug(app.arrivalsUrl, app.arrivalsList);
+			// app.debug(app.arrivalsUrl, app.arrivalsList);
+			// app.debug(app.arrivalsUrl, app.arrivalsList);
+		}
 
+	}
+
+	public void createDocs() throws IOException {
+		arrivalsDoc = Jsoup.connect(arrivalsUrl).get();
+		departuresDoc = Jsoup.connect(departuresUrl).get();
 	}
 
 	public void postDeparture(String status) {
@@ -82,20 +108,23 @@ public class App {
 
 	}
 
-	public void doArrivals() throws IOException {
+	public void doArrivals(String airline) throws IOException {
+		lastArrival = null;
 		String url = config.getProperty("arrivals_url");
-		HtmlParser parser = new HtmlParser(url, config);
-		arrivalsList = parser.arrivalsFetch(url);
+		HtmlParser parser = new HtmlParser(url, config, airline);
+		arrivalsList = parser.arrivalsFetch(arrivalsDoc);
 		arrivalsList = parser.processResults(arrivalsList);
 		Collections.sort(arrivalsList, FlightObject.SORT_BY_DATE);
-		lastArrival = arrivalsList.get(0).toString();
+		if (!arrivalsList.isEmpty()) {
+			lastArrival = arrivalsList.get(0).toString();
+		} 
 
 	}
 
-	public void doDepartures() throws IOException {
+	public void doDepartures(String airline) throws IOException {
 		String url = config.getProperty("departures_url");
-		HtmlParser parser = new HtmlParser(url, config);
-		departuresList = parser.departuresFetch(url);
+		HtmlParser parser = new HtmlParser(url, config, airline);
+		departuresList = parser.departuresFetch(departuresDoc);
 		departuresList = parser.processResults(departuresList);
 		Collections.sort(departuresList, FlightObject.SORT_BY_DATE);
 		lastDeparture = departuresList.get(0).toString();
