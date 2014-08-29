@@ -1,29 +1,36 @@
 package com.airport.twitter;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class FileHandler {
 	private Map<String, String> arrivalsMap = new TreeMap<String, String>();
 	private Map<String, String> departuresMap = new TreeMap<String, String>();
-	private ArrayList<String> arrivals;
-	private ArrayList<String> departures;
+	private ArrayList<String> newArrivalsList;
+	private ArrayList<String> newDeparturesList;
+	private ArrayList<String> oldArrivalsList = new ArrayList<String>();
+	private ArrayList<String> oldDeparturesList = new ArrayList<String>();
 	private String arrLocation, depLocation;
-	
-	public FileHandler(){
+
+	public FileHandler() {
 		this.arrLocation = "src/main/resources/arrivals.txt";
 		this.depLocation = "src/main/resources/departures.txt";
 	}
 
 	public FileHandler(ArrayList<String> arrivals, ArrayList<String> departures) {
 		this();
-		this.arrivals = arrivals;
-		this.departures = departures;
+		this.newArrivalsList = arrivals;
+		this.newDeparturesList = departures;
 	}
 
 	public Map<String, String> loadFromFile(String location) throws IOException {
 		String str = null;
-		Map <String, String> list = new TreeMap<String, String>();
+		Map<String, String> list = new TreeMap<String, String>();
 		BufferedReader br = new BufferedReader(new FileReader(location));
 		while ((str = br.readLine()) != null) {
 			String[] parts = str.split("=");
@@ -34,14 +41,43 @@ public class FileHandler {
 
 	}
 
-	public void checkDuplicateFlights() throws IOException {
+	public void prepareDataSets() throws IOException {
 		arrivalsMap = loadFromFile(arrLocation);
-		ConsolePrinter.printMap(arrivalsMap);
-		System.out.println();
-		System.out.println();
-		departuresMap = loadFromFile(depLocation);
-		ConsolePrinter.printMap(departuresMap);
+		oldArrivalsList = parseMapToList(arrivalsMap);
+		newArrivalsList = removeDuplicates(newArrivalsList,oldArrivalsList);
+		ConsolePrinter.printStringList(newArrivalsList);
+		
+		ConsolePrinter.insertGap();
 
+		departuresMap = loadFromFile(depLocation);
+		oldDeparturesList = parseMapToList(departuresMap);
+		newDeparturesList = removeDuplicates(newDeparturesList,oldDeparturesList);
+		ConsolePrinter.printStringList(newDeparturesList);
+
+	}
+	
+	public ArrayList<String> removeDuplicates(ArrayList<String>newList,ArrayList<String>oldList){
+		
+		for(Iterator<String> iterator = oldList.iterator(); iterator.hasNext();){
+			String string = iterator.next();
+			for(Iterator<String> iter = newList.iterator(); iter.hasNext();){
+				String str = iter.next();
+				if(str.equals(string)){
+					iter.remove();
+					continue;
+				}
+			}
+		}
+		return newList;
+	}
+
+	public ArrayList<String> parseMapToList(Map<String, String> oldList) {
+		ArrayList<String> newList = new ArrayList<String>();
+
+		for (Map.Entry<String, String> entry : oldList.entrySet()) {
+			newList.add(entry.getValue());
+		}
+		return newList;
 	}
 
 	public Map<String, String> getArrivalsMap() {
@@ -61,19 +97,19 @@ public class FileHandler {
 	}
 
 	public ArrayList<String> getArrivals() {
-		return arrivals;
+		return newArrivalsList;
 	}
 
 	public void setArrivals(ArrayList<String> arrivals) {
-		this.arrivals = arrivals;
+		this.newArrivalsList = arrivals;
 	}
 
 	public ArrayList<String> getDepartures() {
-		return departures;
+		return newDeparturesList;
 	}
 
 	public void setDepartures(ArrayList<String> departures) {
-		this.departures = departures;
+		this.newDeparturesList = departures;
 	}
 
 	public String getArrLocation() {
@@ -91,8 +127,5 @@ public class FileHandler {
 	public void setDepLocation(String depLocation) {
 		this.depLocation = depLocation;
 	}
-	
-	
-	
 
 }

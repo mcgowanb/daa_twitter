@@ -29,5 +29,11 @@ public class ConsolePrinter {
 	public static void print(String msg, Object... args) {
 		System.out.println(String.format(msg, args));
 	}
+	
+	public static void insertGap(){
+		System.out.println();
+		System.out.println("===GAP===");
+		System.out.println();
+	}
 
 }

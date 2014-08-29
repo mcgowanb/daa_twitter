@@ -36,10 +36,6 @@ public class App {
 		app.airlineList = new AirlineList(app.config).generateList();
 		app.createDocs();
 		
-		FileHandler fh = new FileHandler(app.arrivedFlights, app.departedFlights);
-		fh.checkDuplicateFlights();
-
-		/*
 		System.out
 				.println("Fetching data from the DAA Website...........................");
 		System.out.println();
@@ -50,6 +46,17 @@ public class App {
 		for (String str : app.airlineList) {
 			app.doArrivals(str);
 		}
+		
+		app.flightMap.clear();		//Clear the hashmap before re=use
+		for (String str : app.airlineList) {	//temp
+			app.doDepartures(str);				//temp
+		}
+			
+			
+		FileHandler fh = new FileHandler(app.arrivedFlights, app.departedFlights);
+		fh.prepareDataSets();
+		
+		/*
 		ConsolePrinter.printStringList(app.arrivedFlights);
 
 		System.out.println();
