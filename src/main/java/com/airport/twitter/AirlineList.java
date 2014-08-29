@@ -15,11 +15,11 @@ public class AirlineList {
 
 	public ArrayList<String> generateAirlineNames() {
 		ArrayList<String> list = new ArrayList<String>();
-		Elements option = doc.select("select[name=ctl00$Content$ctl00$ddlAirline]");
-		for(Element e : option){
-			Elements index = e.getElementsByTag("option");
-			for(int i = 2; i < index.size(); i++){
-				list.add(index.get(i).text());
+		Elements airlineListOfNames = doc.select("select[name=ctl00$Content$ctl00$ddlAirline]");
+		for(Element e : airlineListOfNames){
+			Elements airlineNames = e.getElementsByTag("option");
+			for(int i = 2; i < airlineNames.size(); i++){
+				list.add(airlineNames.get(i).text());
 			}
 		}
 		return list;
