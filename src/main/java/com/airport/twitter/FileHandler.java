@@ -6,8 +6,10 @@ import java.util.*;
 public class FileHandler {
 	private ArrayList<String> newArrivalsList;
 	private ArrayList<String> newDeparturesList;
-	private ArrayList<String> historicalArrivalsList = new ArrayList<String>();
-	private ArrayList<String> historicalDeparturesList = new ArrayList<String>();
+	private ArrayList<String> historicalArrivalsList;// = new ArrayList<String>();
+	private ArrayList<String> historicalDeparturesList;// = new ArrayList<String>();
+	private ArrayList<String> arrivalsToSaveExternally;// = new ArrayList<String>();
+	private ArrayList<String> departuresToSaveExternally;// = new ArrayList<String>();
 	private String arrLocation, depLocation;
 
 	public FileHandler() {
@@ -17,23 +19,21 @@ public class FileHandler {
 
 	public FileHandler(ArrayList<String> arrivals, ArrayList<String> departures) {
 		this();
-		this.newArrivalsList = arrivals;
-		this.newDeparturesList = departures;
+		this.newArrivalsList = this.arrivalsToSaveExternally  = arrivals;
+		this.newDeparturesList = this.departuresToSaveExternally = departures;
 	}
+	
 
 	public ArrayList<String> loadSavedFlightsFromFile(String location)
 			throws IOException {
 		String str = null;
 		ArrayList<String> returnList = new ArrayList<String>();
-		Map<String, String> list = new TreeMap<String, String>();
 		BufferedReader br = new BufferedReader(new FileReader(location));
 		while ((str = br.readLine()) != null) {
-			String[] parts = str.split("=");
-			list.put(parts[0], parts[1]);
+			returnList.add(str);
 		}
 		br.close();
 
-		returnList = parseMapToList(list);
 
 		return returnList;
 
@@ -43,20 +43,13 @@ public class FileHandler {
 		historicalArrivalsList = loadSavedFlightsFromFile(arrLocation);
 		newArrivalsList = removePreviouslyTweetedFlights(newArrivalsList,
 				historicalArrivalsList);
-		ConsolePrinter.printStringList(newArrivalsList);
-		//clearFile(arrLocation);
-
-		ConsolePrinter.insertGap();
-
 		historicalDeparturesList = loadSavedFlightsFromFile(depLocation);
 		newDeparturesList = removePreviouslyTweetedFlights(newDeparturesList,
 				historicalDeparturesList);
-		ConsolePrinter.printStringList(newDeparturesList);
 
 	}
 
-	public ArrayList<String> removePreviouslyTweetedFlights(
-			ArrayList<String> newList, ArrayList<String> oldList) {
+	public ArrayList<String> removePreviouslyTweetedFlights(ArrayList<String> newList, ArrayList<String> oldList) {
 
 		for (Iterator<String> iterator = oldList.iterator(); iterator.hasNext();) {
 			String string = iterator.next();
