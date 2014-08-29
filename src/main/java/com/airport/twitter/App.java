@@ -32,9 +32,8 @@ public class App {
 		app.config.load(App.class.getResourceAsStream(app.filePath));
 		app.arrivalsUrl = app.config.getProperty("arrivals_url");
 		app.departuresUrl = app.config.getProperty("departures_url");
-		
-		app.airlineList = new AirlineList(app.config).generateList();
 		app.createDocs();
+		app.airlineList = new AirlineList(app.arrivalsDoc).generateAirlineNames();
 		
 		System.out
 				.println("Fetching data from the DAA Website...........................");
@@ -44,12 +43,12 @@ public class App {
 
 		app.flightMap.clear();
 		for (String str : app.airlineList) {
-			app.doArrivals(str);
+			app.generateArrivalsData(str);
 		}
 		
 		app.flightMap.clear();		//Clear the hashmap before re=use
 		for (String str : app.airlineList) {	//temp
-			app.doDepartures(str);				//temp
+			app.generateDeparturesData(str);				//temp
 		}
 			
 			
@@ -114,7 +113,7 @@ public class App {
 
 	}
 
-	public void doArrivals(String airline) throws IOException {
+	public void generateArrivalsData(String airline) throws IOException {
 		String url = config.getProperty("arrivals_url");
 		HtmlParser parser = new HtmlParser(url, config, airline);
 		arrivalsList = parser.arrivalsFetch(arrivalsDoc);
@@ -123,10 +122,10 @@ public class App {
 			arrivedFlights.add(arrivalsList.get(0).toString());
 			flightMap.put(airline, arrivalsList.get(0).toString());
 		}
-
+//else something needed here for no flights by airline
 	}
 
-	public void doDepartures(String airline) throws IOException {
+	public void generateDeparturesData(String airline) throws IOException {
 		String url = config.getProperty("departures_url");
 		HtmlParser parser = new HtmlParser(url, config, airline);
 		departuresList = parser.departuresFetch(departuresDoc);
@@ -135,7 +134,7 @@ public class App {
 			departedFlights.add(departuresList.get(0).toString());
 			flightMap.put(airline, departuresList.get(0).toString());
 		}
-
+//else something needed here too
 	}
 
 }
