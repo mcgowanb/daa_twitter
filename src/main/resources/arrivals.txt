@@ -1,3 +1,4 @@
+T2: Aer Lingus arriving from Lanzarote, flight no: EI779. Arrival time: 03 Sep 23:55. Status: Cancelled. #DAA
 T1: Air Contractors arriving from Reus, flight no: ABR416J. Arrival time: 29 Aug 18:20. Status: Arrived 18:22. #DAA
 T1: Air France arriving from Paris-CDG, flight no: AF1478. Arrival time: 29 Aug 19:40. Status: Arrived 19:36. #DAA
 T1: British Airways arriving from London-LHR, flight no: BA824. Arrival time: 29 Aug 18:40. Status: Arrived 18:49. #DAA
