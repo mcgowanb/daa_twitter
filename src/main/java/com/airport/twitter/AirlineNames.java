@@ -18,7 +18,7 @@ public class AirlineNames {
 		Elements airlineListOfNames = doc.select("select[name=ctl00$Content$ctl00$ddlAirline]");
 		for(Element e : airlineListOfNames){
 			Elements airlineNames = e.getElementsByTag("option");
-			for(int i = 2; i < airlineNames.size(); i++){
+			for(int i = 1; i < airlineNames.size(); i++){
 				list.add(airlineNames.get(i).text());
 			}
 		}

@@ -20,15 +20,14 @@ public class HtmlParser {
 		this.airline = airline;
 
 	}
-	
-	public ArrayList<FlightObject> prepArrivalList(Document doc) throws IOException{
+
+	public ArrayList<FlightObject> prepArrivalList(Document doc) throws IOException {
 		flights = arrivalsFetch(doc);
 		flights = processResults(flights);
 		return flights;
 	}
 
-	public ArrayList<FlightObject> arrivalsFetch(Document doc)
-			throws IOException {
+	public ArrayList<FlightObject> arrivalsFetch(Document doc) throws IOException {
 
 		Elements table = doc.getElementsByTag("table");
 
@@ -86,8 +85,7 @@ public class HtmlParser {
 		return flights;
 	}
 
-	public ArrayList<FlightObject> departuresFetch(Document doc)
-			throws IOException {
+	public ArrayList<FlightObject> departuresFetch(Document doc) throws IOException {
 
 		Elements table = doc.getElementsByTag("table");
 

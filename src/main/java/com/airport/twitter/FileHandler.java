@@ -1,15 +1,21 @@
 package com.airport.twitter;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class FileHandler {
 	private ArrayList<String> newArrivalsList;
 	private ArrayList<String> newDeparturesList;
-	private ArrayList<String> historicalArrivalsList;// = new ArrayList<String>();
-	private ArrayList<String> historicalDeparturesList;// = new ArrayList<String>();
-	private ArrayList<String> arrivalsToSaveExternally;// = new ArrayList<String>();
-	private ArrayList<String> departuresToSaveExternally;// = new ArrayList<String>();
+	private ArrayList<String> historicalArrivalsList;
+	private ArrayList<String> historicalDeparturesList;
+	private ArrayList<String> arrivalsToSaveExternally;
+	private ArrayList<String> departuresToSaveExternally;
 	private String arrLocation, depLocation;
 
 	public FileHandler() {
@@ -17,15 +23,34 @@ public class FileHandler {
 		this.depLocation = "src/main/resources/departures.txt";
 	}
 
+	
 	public FileHandler(ArrayList<String> arrivals, ArrayList<String> departures) {
 		this();
-		this.newArrivalsList = this.arrivalsToSaveExternally  = arrivals;
+		this.newArrivalsList = this.arrivalsToSaveExternally = arrivals;
 		this.newDeparturesList = this.departuresToSaveExternally = departures;
 	}
 	
+	public void checkForNewData(){
+		if (newArrivalsList.isEmpty() & newDeparturesList.isEmpty()){
+			System.out.println("There are no flights to analyse");
+			System.exit(0);
+		}
+	}
+	
+	public void executeFileActions() throws IOException{
+		historicalArrivalsList = loadSavedFlightsFromFile(arrLocation);
+		newArrivalsList = removePreviouslyTweetedFlights(newArrivalsList, historicalArrivalsList);
+		historicalDeparturesList = loadSavedFlightsFromFile(depLocation);
+		newDeparturesList = removePreviouslyTweetedFlights(newDeparturesList, historicalDeparturesList);
+		checkForNewData();
+		clearFile(arrLocation);
+		clearFile(depLocation);
+		saveFlightsToFile(arrLocation, arrivalsToSaveExternally);
+		saveFlightsToFile(depLocation, departuresToSaveExternally);
+	}
+	
 
-	public ArrayList<String> loadSavedFlightsFromFile(String location)
-			throws IOException {
+	public ArrayList<String> loadSavedFlightsFromFile(String location) throws IOException {
 		String str = null;
 		ArrayList<String> returnList = new ArrayList<String>();
 		BufferedReader br = new BufferedReader(new FileReader(location));
@@ -34,20 +59,20 @@ public class FileHandler {
 		}
 		br.close();
 
-
 		return returnList;
 
 	}
-
-	public void prepareDataSets() throws IOException {
-		historicalArrivalsList = loadSavedFlightsFromFile(arrLocation);
-		newArrivalsList = removePreviouslyTweetedFlights(newArrivalsList,
-				historicalArrivalsList);
-		historicalDeparturesList = loadSavedFlightsFromFile(depLocation);
-		newDeparturesList = removePreviouslyTweetedFlights(newDeparturesList,
-				historicalDeparturesList);
-
+	
+	public void saveFlightsToFile(String location, ArrayList<String> list) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(location));
+		for(String s : list){
+			bw.write(s);	
+			bw.newLine();
+		}
+		bw.close();
+		
 	}
+
 
 	public ArrayList<String> removePreviouslyTweetedFlights(ArrayList<String> newList, ArrayList<String> oldList) {
 

@@ -13,8 +13,7 @@ public class App {
 	private ArrayList<String> airlineListString = new ArrayList<String>();
 	private ArrayList<String> arrivedFlightsStringList = new ArrayList<String>();
 	private ArrayList<String> departedFlightsStringList = new ArrayList<String>();
-	private String filePath, lastArrival, lastDeparture, arrivalsUrl,
-			departuresUrl;
+	private String filePath, lastArrival, lastDeparture, arrivalsUrl, departuresUrl;
 	private Properties config;
 	private Document arrivalsDoc, departuresDoc;
 
@@ -32,50 +31,44 @@ public class App {
 		app.departuresUrl = app.config.getProperty("departures_url");
 		app.createDocs();
 		app.airlineListString = new AirlineNames(app.arrivalsDoc).generateAirlineNames();
-		
-		
-		System.out
-				.println("Fetching data from the DAA Website...........................");
+
+		System.out.println("Fetching data from the DAA Website...........................");
 		System.out.println();
-		System.out.println("====Listing Airlines=====");
-		
-		ConsolePrinter.printStringList(app.airlineListString);
-		
+		// System.out.println("====Listing Airlines=====");
+
+		// ConsolePrinter.printStringList(app.airlineListString);
+
 		System.out.println();
 		System.out.println("==========PROCESSING ARRIVALS DATA==========");
 		System.out.println();
-		
 
-		for (String str : app.airlineListString) {		//Looping through the airline list and processing the data methods for each carrier
+		for (String str : app.airlineListString) {
 			app.generateArrivalsData(str);
-			app.generateDeparturesData(str);		
+			app.generateDeparturesData(str);
 		}
-		
-			
+
 		FileHandler fh = new FileHandler(app.arrivedFlightsStringList, app.departedFlightsStringList);
-		fh.prepareDataSets();
-		
+
+		fh.executeFileActions();
+
 		ConsolePrinter.printStringList(app.arrivedFlightsStringList);
 		ConsolePrinter.insertGap();
 		ConsolePrinter.printStringList(app.departedFlightsStringList);
 	}
-
 
 	public void createDocs() throws IOException {
 		arrivalsDoc = Jsoup.connect(arrivalsUrl).get();
 		departuresDoc = Jsoup.connect(departuresUrl).get();
 	}
 
-
-
 	public void generateArrivalsData(String airline) throws IOException {
 		HtmlParser parser = new HtmlParser(arrivalsUrl, config, airline);
 		arrivalsObjectList = parser.arrivalsFetch(arrivalsDoc);
-		arrivalsObjectList = parser.processResults(arrivalsObjectList); //remove nulls & incomplete flights, sort in ascending order by time
+		arrivalsObjectList = parser.processResults(arrivalsObjectList);
 		if (!arrivalsObjectList.isEmpty()) {
 			arrivedFlightsStringList.add(arrivalsObjectList.get(0).toString());
 		}
-//else something needed here for no flights by airline
+		// else something needed here for no flights by airline
 	}
 
 	public void generateDeparturesData(String airline) throws IOException {
@@ -85,9 +78,9 @@ public class App {
 		if (!departuresObjectList.isEmpty()) {
 			departedFlightsStringList.add(departuresObjectList.get(0).toString());
 		}
-//else something needed here too
+		// else something needed here too
 	}
-	
+
 	public void postDeparture(String status) {
 		TwitterProcess tp = new TwitterProcess(status);
 		tp.initialiseDepartures(config);
@@ -101,7 +94,7 @@ public class App {
 		tp.postToTwitter();
 
 	}
-	
+
 	public void debug(String url, ArrayList<FlightObject> list) {
 
 		System.out.println();
@@ -113,7 +106,5 @@ public class App {
 		System.out.println();
 
 	}
-
-
 
 }
