@@ -42,7 +42,7 @@ public class FileHandler {
 		newArrivalsList = removePreviouslyTweetedFlights(newArrivalsList, historicalArrivalsList);
 		historicalDeparturesList = loadSavedFlightsFromFile(depLocation);
 		newDeparturesList = removePreviouslyTweetedFlights(newDeparturesList, historicalDeparturesList);
-		checkForNewData();
+		checkForNewData();	//So, need to only remove the flights that have matches from the file, otherwise there will be multiple postings of stuff
 		clearFile(arrLocation);
 		clearFile(depLocation);
 		saveFlightsToFile(arrLocation, arrivalsToSaveExternally);
@@ -101,5 +101,27 @@ public class FileHandler {
 			newList.add(entry.getValue());
 		}
 		return newList;
+	}
+
+
+	public Object getArrLocation() {
+		return arrLocation;
+	}
+
+
+	public Object getDepLocation() {
+		return depLocation;
+	}
+
+
+	public Object getNewArrivalsList() {
+		// TODO Auto-generated method stub
+		return newArrivalsList;
+	}
+
+
+	public Object getNewDeparturesList() {
+		// TODO Auto-generated method stub
+		return newDeparturesList;
 	}
 }
