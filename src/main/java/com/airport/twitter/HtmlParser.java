@@ -2,8 +2,6 @@ package com.airport.twitter;
 
 import java.io.IOException;
 import java.util.*;
-
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -15,18 +13,8 @@ public class HtmlParser {
 	private String hashTag = "#DAA";
 	private List<FlightObject> flights = new ArrayList<FlightObject>();
 
-	public HtmlParser(String url, Properties config, String airline) {
-		t1 = "t1";
-		t2 = "t2";
-		hashTag = "#DAA";
+	public HtmlParser(String airline) {
 		this.airline = airline;
-
-	}
-
-	public List<FlightObject> prepArrivalList(Document doc) throws IOException {
-		flights = arrivalsFetch(doc);
-		flights = processResults(flights);
-		return flights;
 	}
 
 	public List<FlightObject> arrivalsFetch(Document doc) throws IOException {
@@ -145,7 +133,7 @@ public class HtmlParser {
 		return flights;
 	}
 
-	public List<FlightObject> processResults(List<FlightObject> list) {
+	public List<FlightObject> removeIncompleteFlights(List<FlightObject> list) {
 		for (Iterator<FlightObject> iter = list.iterator(); iter.hasNext();) {
 			FlightObject fo = iter.next();
 			if (fo.status == null) {
@@ -159,5 +147,9 @@ public class HtmlParser {
 		}
 		Collections.sort(list, FlightObject.SORT_BY_DATE);
 		return list;
+	}
+
+	public String getAirline() {
+		return this.airline;
 	}
 }

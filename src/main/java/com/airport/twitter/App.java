@@ -62,9 +62,9 @@ public class App {
 	}
 
 	public void generateArrivalsData(String airline) throws IOException {
-		HtmlParser parser = new HtmlParser(arrivalsUrl, config, airline);
+		HtmlParser parser = new HtmlParser(airline);
 		arrivalsObjectList = parser.arrivalsFetch(arrivalsDoc); //change this, sort before returning the list
-		arrivalsObjectList = parser.processResults(arrivalsObjectList);
+		arrivalsObjectList = parser.removeIncompleteFlights(arrivalsObjectList);
 		if (!arrivalsObjectList.isEmpty()) {
 			arrivedFlightsStringList.add(arrivalsObjectList.get(0).toString());
 		}
@@ -72,9 +72,9 @@ public class App {
 	}
 
 	public void generateDeparturesData(String airline) throws IOException {
-		HtmlParser parser = new HtmlParser(departuresUrl, config, airline);
+		HtmlParser parser = new HtmlParser(airline);
 		departuresObjectList = parser.departuresFetch(departuresDoc);
-		departuresObjectList = parser.processResults(departuresObjectList);
+		departuresObjectList = parser.removeIncompleteFlights(departuresObjectList);
 		if (!departuresObjectList.isEmpty()) {
 			departedFlightsStringList.add(departuresObjectList.get(0).toString());
 		}
@@ -95,16 +95,5 @@ public class App {
 
 	}
 
-	public void debug(String url, ArrayList<FlightObject> list) {
-
-		System.out.println();
-		System.out.println("====================DEBUG====================");
-		System.out.println("Parsing data from....................." + url);
-		System.out.println();
-		ConsolePrinter.printObjecList(list);
-		System.out.println("====================END DEBUG====================");
-		System.out.println();
-
-	}
 
 }
