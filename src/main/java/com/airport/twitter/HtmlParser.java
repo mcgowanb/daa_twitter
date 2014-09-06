@@ -10,8 +10,10 @@ import org.jsoup.select.Elements;
 
 public class HtmlParser {
 	private String airline;
-	private String t1, t2, hashTag;
-	private ArrayList<FlightObject> flights = new ArrayList<FlightObject>();
+	private String t1 = "t1";
+	private String t2 = "t2";
+	private String hashTag = "#DAA";
+	private List<FlightObject> flights = new ArrayList<FlightObject>();
 
 	public HtmlParser(String url, Properties config, String airline) {
 		t1 = "t1";
@@ -21,13 +23,13 @@ public class HtmlParser {
 
 	}
 
-	public ArrayList<FlightObject> prepArrivalList(Document doc) throws IOException {
+	public List<FlightObject> prepArrivalList(Document doc) throws IOException {
 		flights = arrivalsFetch(doc);
 		flights = processResults(flights);
 		return flights;
 	}
 
-	public ArrayList<FlightObject> arrivalsFetch(Document doc) throws IOException {
+	public List<FlightObject> arrivalsFetch(Document doc) throws IOException {
 
 		Elements table = doc.getElementsByTag("table");
 
@@ -85,7 +87,7 @@ public class HtmlParser {
 		return flights;
 	}
 
-	public ArrayList<FlightObject> departuresFetch(Document doc) throws IOException {
+	public List<FlightObject> departuresFetch(Document doc) throws IOException {
 
 		Elements table = doc.getElementsByTag("table");
 
@@ -143,7 +145,7 @@ public class HtmlParser {
 		return flights;
 	}
 
-	public ArrayList<FlightObject> processResults(ArrayList<FlightObject> list) {
+	public List<FlightObject> processResults(List<FlightObject> list) {
 		for (Iterator<FlightObject> iter = list.iterator(); iter.hasNext();) {
 			FlightObject fo = iter.next();
 			if (fo.status == null) {

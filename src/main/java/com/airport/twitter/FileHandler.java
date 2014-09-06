@@ -26,13 +26,6 @@ public class FileHandler {
 		this.newDeparturesList = this.departuresToSaveExternally = departures;
 	}
 
-	public void checkForNewData() {
-		if (newArrivalsList.isEmpty() & newDeparturesList.isEmpty()) {
-			System.out.println("There are no flights to analyse");
-			System.exit(0);
-		}
-	}
-
 	public void executeFileActions() throws IOException {
 		historicalArrivalsList = loadSavedFlightsFromFile(arrLocation);
 		newArrivalsList = removePreviouslyTweetedFlights(newArrivalsList, historicalArrivalsList);
@@ -45,6 +38,13 @@ public class FileHandler {
 		clearFile(depLocation);
 		saveFlightsToFile(arrLocation, arrivalsToSaveExternally);
 		saveFlightsToFile(depLocation, departuresToSaveExternally);
+	}
+
+	public void checkForNewData() {
+		if (newArrivalsList.isEmpty() & newDeparturesList.isEmpty()) {
+			System.out.println("There are no flights to analyse");
+			System.exit(0);
+		}
 	}
 
 	public List<String> loadSavedFlightsFromFile(String location) throws IOException {
@@ -71,7 +71,6 @@ public class FileHandler {
 	}
 
 	public List<String> removePreviouslyTweetedFlights(List<String> newList, List<String> oldList) {
-
 		newList.removeAll(oldList);
 		return newList;
 	}
@@ -90,12 +89,10 @@ public class FileHandler {
 	}
 
 	public List<String> getNewArrivalsList() {
-		// TODO Auto-generated method stub
 		return newArrivalsList;
 	}
 
 	public List<String> getNewDeparturesList() {
-		// TODO Auto-generated method stub
 		return newDeparturesList;
 	}
 }

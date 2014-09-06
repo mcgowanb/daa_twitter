@@ -1,6 +1,7 @@
 package com.airport.twitter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,8 +14,8 @@ public class AirlineNames {
 		this.doc = doc;
 	}
 
-	public ArrayList<String> generateAirlineNames() {
-		ArrayList<String> list = new ArrayList<String>();
+	public List<String> generateAirlineNames() {
+		List<String> list = new ArrayList<String>();
 		Elements airlineListOfNames = doc.select("select[name=ctl00$Content$ctl00$ddlAirline]");
 		for(Element e : airlineListOfNames){
 			Elements airlineNames = e.getElementsByTag("option");
@@ -23,6 +24,11 @@ public class AirlineNames {
 			}
 		}
 		return list;
+	}
+
+	public Object getDoc() {
+		// TODO Auto-generated method stub
+		return doc;
 	}
 
 }

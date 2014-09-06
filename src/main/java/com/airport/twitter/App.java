@@ -8,11 +8,11 @@ import org.jsoup.nodes.Document;
 
 public class App {
 
-	private ArrayList<FlightObject> departuresObjectList = new ArrayList<FlightObject>();
-	private ArrayList<FlightObject> arrivalsObjectList = new ArrayList<FlightObject>();
-	private ArrayList<String> airlineListString = new ArrayList<String>();
-	private ArrayList<String> arrivedFlightsStringList = new ArrayList<String>();
-	private ArrayList<String> departedFlightsStringList = new ArrayList<String>();
+	private List<FlightObject> departuresObjectList = new ArrayList<FlightObject>();
+	private List<FlightObject> arrivalsObjectList = new ArrayList<FlightObject>();
+	private List<String> airlineListString = new ArrayList<String>();
+	private List<String> arrivedFlightsStringList = new ArrayList<String>();
+	private List<String> departedFlightsStringList = new ArrayList<String>();
 	private String filePath, lastArrival, lastDeparture, arrivalsUrl, departuresUrl;
 	private Properties config;
 	private Document arrivalsDoc, departuresDoc;
@@ -63,7 +63,7 @@ public class App {
 
 	public void generateArrivalsData(String airline) throws IOException {
 		HtmlParser parser = new HtmlParser(arrivalsUrl, config, airline);
-		arrivalsObjectList = parser.arrivalsFetch(arrivalsDoc);
+		arrivalsObjectList = parser.arrivalsFetch(arrivalsDoc); //change this, sort before returning the list
 		arrivalsObjectList = parser.processResults(arrivalsObjectList);
 		if (!arrivalsObjectList.isEmpty()) {
 			arrivedFlightsStringList.add(arrivalsObjectList.get(0).toString());

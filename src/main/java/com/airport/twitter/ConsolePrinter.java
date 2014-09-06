@@ -1,6 +1,7 @@
 package com.airport.twitter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,7 +13,7 @@ public class ConsolePrinter {
 		}
 	}
 
-	public static void printStringList(ArrayList<String> list) {
+	public static void printStringList(List<String> list) {
 		for (String str : list) {
 			System.out.println(str);
 		}
